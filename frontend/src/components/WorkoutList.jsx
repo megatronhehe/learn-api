@@ -1,37 +1,36 @@
-import React from "react";
+import React, { useContext } from "react";
 
-import { TbAnalyze, TbWeight, TbTrashX, TbPencil } from "react-icons/tb";
+import WorkoutItem from "./WorkoutItem";
 
-export default function WorkoutList({ workout }) {
-	const { load, reps, title } = workout;
+import { TbRefresh } from "react-icons/tb";
 
-	return (
-		<li className="flex items-center px-4 py-2 border rounded-xl">
-			<h2 className="w-2/5">{title}</h2>
+import WorkoutsContext from "../context/WorkoutsContext";
 
-			<ul className="flex w-2/5 gap-4">
-				<li className="flex items-center gap-1">
-					<TbWeight />
-					<p>
-						{load} <span className="text-xs">kg</span>
-					</p>
-				</li>
-				<li className="flex items-center gap-1">
-					<TbAnalyze />
-					<p>
-						{reps} <span className="text-xs">reps</span>
-					</p>
-				</li>
-			</ul>
+export default function WorkoutList() {
+	const { workouts, isLoading, isErrorExist, errorMsg, setRetrig } =
+		useContext(WorkoutsContext);
 
-			<ul className="flex justify-end w-1/5 gap-1 text-gray-400">
-				<li>
-					<TbPencil className="text-xl" />
-				</li>
-				<li>
-					<TbTrashX className="text-xl" />
-				</li>
-			</ul>
-		</li>
-	);
+	if (isLoading) {
+		return <div className="pt-12 text-center">Loading ...</div>;
+	}
+
+	if (isErrorExist) {
+		return (
+			<div className="flex flex-col items-center gap-6 pt-12">
+				<h1>{errorMsg}</h1>
+				<button
+					onClick={() => setRetrig((prev) => !prev)}
+					className="flex items-center gap-2 px-3 py-2 text-sm text-white bg-blue-400 rounded-xl w-22"
+				>
+					Try again <TbRefresh />
+				</button>
+			</div>
+		);
+	}
+
+	const workoutElements = workouts.map((workout) => (
+		<WorkoutItem key={workout._id} workout={workout} />
+	));
+
+	return <ul>{workoutElements}</ul>;
 }
