@@ -20,7 +20,7 @@ export default function WorkoutsContextProvider({ children }) {
 				return res.json();
 			})
 			.then((data) => setWorkouts(data))
-			.catch((err) => console.log(err))
+			.catch((err) => setErrorMsg(err.message))
 			.finally(() => setIsLoading(false));
 	}, [retrig]);
 
