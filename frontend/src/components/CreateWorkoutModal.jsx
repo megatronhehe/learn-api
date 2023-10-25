@@ -13,9 +13,7 @@ export default function CreateWorkoutModal({ setToggleModal }) {
 	const [isAdding, setIsAdding] = useState(false);
 	const [errorMsg, setErrorMsg] = useState("");
 
-	const { setWorkouts, workouts } = useContext(WorkoutsContext);
-
-	console.log(workouts);
+	const { setWorkouts } = useContext(WorkoutsContext);
 
 	const handleWorkoutForm = (e) => {
 		const { name, value } = e.target;

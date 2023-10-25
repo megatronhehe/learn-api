@@ -1,9 +1,43 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 
-import { TbAnalyze, TbWeight, TbTrashX, TbPencil } from "react-icons/tb";
+import {
+	TbAnalyze,
+	TbWeight,
+	TbTrashX,
+	TbPencil,
+	TbLoader2,
+} from "react-icons/tb";
+
+import WorkoutsContext from "../context/WorkoutsContext";
 
 export default function WorkoutItem({ workout }) {
-	const { load, reps, title } = workout;
+	const { _id, load, reps, title } = workout;
+
+	const { setWorkouts } = useContext(WorkoutsContext);
+
+	const [isDeleting, setIsDeleting] = useState(false);
+	const [errorMsg, setErrorMsg] = useState("");
+
+	const deleteWorkout = async (id) => {
+		setIsDeleting(true);
+		setErrorMsg("");
+		try {
+			const res = await fetch(`http://localhost:4000/api/workouts/${id}`, {
+				method: "DELETE",
+			});
+
+			if (!res.ok) {
+				return setErrorMsg(`${res.status} | ${res.statusText}`);
+			}
+
+			const data = await res.json();
+			setWorkouts((prev) => prev.filter((workout) => workout._id !== data._id));
+		} catch (error) {
+			setErrorMsg(error.message);
+		} finally {
+			setIsDeleting(false);
+		}
+	};
 
 	return (
 		<li className="flex items-center px-4 py-2 border rounded-xl">
@@ -24,12 +58,14 @@ export default function WorkoutItem({ workout }) {
 				</li>
 			</ul>
 
-			<ul className="flex justify-end w-1/5 gap-1 text-gray-400">
+			<ul className="flex justify-end w-1/5 gap-1 text-xl text-gray-400">
 				<li>
-					<TbPencil className="text-xl" />
+					<TbPencil />
 				</li>
 				<li>
-					<TbTrashX className="text-xl" />
+					<button disabled={isDeleting} onClick={() => deleteWorkout(_id)}>
+						{isDeleting ? <TbLoader2 className="animate-spin" /> : <TbTrashX />}
+					</button>
 				</li>
 			</ul>
 		</li>
