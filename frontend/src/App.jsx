@@ -25,7 +25,7 @@ function App() {
 					</section>
 
 					<section>
-						<WorkoutList />
+						<WorkoutList setToggleModal={setToggleModal} />
 					</section>
 				</div>
 			</main>
