@@ -15,12 +15,12 @@ export default function WorkoutsContextProvider({ children }) {
 		fetch("http://localhost:4000/api/workouts/")
 			.then((res) => {
 				if (!res.ok) {
-					return setErrorMsg("Something Went Wrong");
+					return setErrorMsg(`${res.status} | ${res.statusText}`);
 				}
 				return res.json();
 			})
 			.then((data) => setWorkouts(data))
-			.catch((err) => setErrorMsg(err))
+			.catch((err) => console.log(err))
 			.finally(() => setIsLoading(false));
 	}, [retrig]);
 
