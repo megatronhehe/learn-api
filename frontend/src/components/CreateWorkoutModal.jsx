@@ -1,17 +1,49 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
-import { TbAnalyze, TbWeight, TbX } from "react-icons/tb";
+import { TbAnalyze, TbWeight, TbX, TbLoader2 } from "react-icons/tb";
+
+import WorkoutsContext from "../context/WorkoutsContext";
 
 export default function CreateWorkoutModal({ setToggleModal }) {
 	const [workoutForm, setWorkoutForm] = useState({
 		title: "",
-		loads: 0,
+		load: 0,
 		reps: 0,
 	});
+	const [isAdding, setIsAdding] = useState(false);
+	const [errorMsg, setErrorMsg] = useState("");
+
+	const { setWorkouts, workouts } = useContext(WorkoutsContext);
+
+	console.log(workouts);
 
 	const handleWorkoutForm = (e) => {
 		const { name, value } = e.target;
 		setWorkoutForm((prev) => ({ ...prev, [name]: value }));
+	};
+
+	const createWorkout = async (e) => {
+		e.preventDefault();
+		setIsAdding(true);
+		setErrorMsg("");
+		try {
+			const res = await fetch("http://localhost:4000/api/workouts/", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(workoutForm),
+			});
+
+			if (!res.ok) {
+				return setErrorMsg(`${res.status} | ${res.statusText}`);
+			}
+			const data = await res.json();
+			setWorkouts((prev) => [data, ...prev]);
+			setToggleModal(false);
+		} catch (error) {
+			setErrorMsg(error.message);
+		} finally {
+			setIsAdding(false);
+		}
 	};
 
 	return (
@@ -42,15 +74,15 @@ export default function CreateWorkoutModal({ setToggleModal }) {
 
 					<div className="flex gap-4">
 						<div className="flex flex-col items-center w-1/2 gap-2">
-							<label htmlFor="loads" className="flex items-center gap-2">
-								<TbWeight /> Loads <span className="text-sm">(Kg)</span>
+							<label htmlFor="load" className="flex items-center gap-2">
+								<TbWeight /> Load <span className="text-sm">(Kg)</span>
 							</label>
 							<input
-								id="loads"
-								name="loads"
+								id="load"
+								name="load"
 								type="number"
 								onChange={handleWorkoutForm}
-								value={workoutForm.loads}
+								value={workoutForm.load}
 								className="w-full px-4 py-2 border rounded-xl"
 							/>
 						</div>
@@ -70,8 +102,16 @@ export default function CreateWorkoutModal({ setToggleModal }) {
 						</div>
 					</div>
 
-					<button className="px-4 py-2 text-white bg-green-400 rounded-xl">
-						create new workout +
+					<button
+						disabled={isAdding}
+						onClick={createWorkout}
+						className="px-4 py-2 text-white bg-green-400 rounded-xl"
+					>
+						{isAdding ? (
+							<TbLoader2 className="animate-spin" />
+						) : (
+							"create new workout +"
+						)}
 					</button>
 				</form>
 			</div>

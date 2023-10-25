@@ -9,26 +9,41 @@ export default function WorkoutsContextProvider({ children }) {
 
 	const [retrig, setRetrig] = useState(false);
 
-	useEffect(() => {
+	const fetchWorkout = async () => {
 		setIsLoading(true);
 		setErrorMsg("");
-		fetch("http://localhost:4000/api/workouts/")
-			.then((res) => {
-				if (!res.ok) {
-					return setErrorMsg(`${res.status} | ${res.statusText}`);
-				}
-				return res.json();
-			})
-			.then((data) => setWorkouts(data))
-			.catch((err) => setErrorMsg(err.message))
-			.finally(() => setIsLoading(false));
+		try {
+			const res = await fetch("http://localhost:4000/api/workouts/");
+
+			if (!res.ok) {
+				return setErrorMsg(`${res.status} | ${res.statusText}`);
+			}
+
+			const data = await res.json();
+			setWorkouts(data);
+		} catch (error) {
+			setErrorMsg(error.message);
+		} finally {
+			setIsLoading(false);
+		}
+	};
+
+	useEffect(() => {
+		fetchWorkout();
 	}, [retrig]);
 
 	const isErrorExist = errorMsg.length > 0;
 
 	return (
 		<WorkoutsContext.Provider
-			value={{ workouts, isLoading, isErrorExist, errorMsg, setRetrig }}
+			value={{
+				workouts,
+				setWorkouts,
+				isLoading,
+				isErrorExist,
+				errorMsg,
+				setRetrig,
+			}}
 		>
 			{children}
 		</WorkoutsContext.Provider>

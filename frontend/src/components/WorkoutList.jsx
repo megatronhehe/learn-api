@@ -32,5 +32,5 @@ export default function WorkoutList() {
 		<WorkoutItem key={workout._id} workout={workout} />
 	));
 
-	return <ul>{workoutElements}</ul>;
+	return <ul className="flex flex-col gap-2">{workoutElements}</ul>;
 }
