@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 
 import WorkoutItem from "./WorkoutItem";
 
-import { TbRefresh, TbPlus } from "react-icons/tb";
+import { TbRefresh, TbPlus, TbLoader2 } from "react-icons/tb";
 
 import WorkoutsContext from "../context/WorkoutsContext";
 
@@ -13,7 +13,13 @@ export default function WorkoutList({ setToggleModal }) {
 	const isListEmpty = workouts.length === 0;
 
 	if (isLoading) {
-		return <div className="pt-12 text-center">Loading ...</div>;
+		return (
+			<div className="flex flex-col items-center gap-6 pt-12">
+				<h1 className="flex items-center gap-2">
+					Loading <TbLoader2 className="text-xl animate-spin" />
+				</h1>
+			</div>
+		);
 	}
 
 	if (isErrorExist) {
