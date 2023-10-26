@@ -106,27 +106,30 @@ export default function WorkoutItem({ workout }) {
 					className="px-2 bg-white"
 				/>
 				<ul className="flex gap-2 text-xl text-gray-400">
-					{enableEdit && (
-						<li>
-							<button
-								onClick={() => editWorkout(_id)}
-								className="duration-200 hover:scale-125"
-							>
-								<TbCheck />
-							</button>
-						</li>
-					)}
+					<li>
+						<button
+							disabled={!enableEdit}
+							onClick={() => editWorkout(_id)}
+							className={`duration-200 hover:scale-125 hover:text-green-400
+								${enableEdit ? "scale-100" : "scale-0"}
+								`}
+						>
+							<TbCheck />
+						</button>
+					</li>
+
 					<li>
 						<button
 							onClick={() => setEnableEdit((prev) => !prev)}
-							className="duration-200 hover:scale-125"
+							className="duration-200 hover:scale-125 hover:text-blue-400"
 						>
 							{enableEdit ? <TbX /> : <TbPencil />}
 						</button>
 					</li>
+
 					<li>
 						<button
-							className="duration-200 hover:scale-125"
+							className="duration-200 hover:scale-125 hover:text-red-400"
 							disabled={isDeleting}
 							onClick={() => deleteWorkout(_id)}
 						>
@@ -140,8 +143,8 @@ export default function WorkoutItem({ workout }) {
 				</ul>
 			</div>
 			<div className="py-1.5 px-4 text-sm bg-gray-100">
-				<ul className="flex gap-10">
-					<li className="flex items-center gap-1">
+				<ul className="flex gap-8 text-gray-600">
+					<li className="flex items-center ">
 						<TbCircleDashed />
 						<input
 							disabled={!enableEdit}
@@ -149,14 +152,14 @@ export default function WorkoutItem({ workout }) {
 							name="reps"
 							onChange={handleEditWorkout}
 							value={curWorkout.reps}
-							className="w-10 pl-1 rounded-lg"
+							className="w-10 pl-2 duration-200 rounded-lg"
 						/>
 						{!enableEdit && (
 							<span className="absolute ml-10 text-xs">reps</span>
 						)}
 					</li>
 
-					<li className="flex items-center gap-1">
+					<li className="flex items-center ">
 						<TbCircle />
 						<input
 							disabled={!enableEdit}
@@ -164,14 +167,14 @@ export default function WorkoutItem({ workout }) {
 							name="sets"
 							onChange={handleEditWorkout}
 							value={curWorkout.sets}
-							className="w-10 pl-1 rounded-lg"
+							className="w-10 pl-2 duration-200 rounded-lg"
 						/>
 						{!enableEdit && (
 							<span className="absolute ml-10 text-xs">sets</span>
 						)}
 					</li>
 
-					<li className="flex items-center gap-1">
+					<li className="flex items-center ">
 						<TbWeight />
 						<input
 							disabled={!enableEdit}
@@ -179,7 +182,7 @@ export default function WorkoutItem({ workout }) {
 							name="load"
 							onChange={handleEditWorkout}
 							value={curWorkout.load}
-							className="w-10 pl-1 rounded-lg"
+							className="w-10 pl-2 duration-200 rounded-lg"
 						/>
 						{!enableEdit && (
 							<span className="absolute ml-10 text-xs">(Kg)</span>

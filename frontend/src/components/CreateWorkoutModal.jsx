@@ -127,7 +127,7 @@ export default function CreateWorkoutModal({ setToggleModal }) {
 					<button
 						disabled={isAdding || !isValid}
 						onClick={createWorkout}
-						className={`px-4 py-2 text-white bg-green-400 rounded-xl
+						className={`px-4 py-2 text-white  rounded-xl
 							${!isValid ? "bg-gray-300" : "bg-green-400 "}
 						`}
 					>
