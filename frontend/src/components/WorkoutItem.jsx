@@ -1,22 +1,25 @@
 import React, { useContext, useState } from "react";
 
 import {
-	TbAnalyze,
 	TbWeight,
 	TbTrashX,
 	TbPencil,
 	TbLoader2,
+	TbCircle,
+	TbCircleDashed,
 } from "react-icons/tb";
 
 import WorkoutsContext from "../context/WorkoutsContext";
 
 export default function WorkoutItem({ workout }) {
-	const { _id, load, reps, title } = workout;
+	const { _id, load, reps, sets, title } = workout;
 
 	const { setWorkouts } = useContext(WorkoutsContext);
 
 	const [isDeleting, setIsDeleting] = useState(false);
 	const [errorMsg, setErrorMsg] = useState("");
+
+	console.log(workout);
 
 	const deleteWorkout = async (id) => {
 		setIsDeleting(true);
@@ -40,34 +43,45 @@ export default function WorkoutItem({ workout }) {
 	};
 
 	return (
-		<li className="flex items-center px-4 py-2 border rounded-xl">
-			<h2 className="w-2/5">{title}</h2>
-
-			<ul className="flex w-2/5 gap-4">
-				<li className="flex items-center gap-1">
-					<TbWeight />
-					<p>
-						{load} <span className="text-xs">kg</span>
-					</p>
-				</li>
-				<li className="flex items-center gap-1">
-					<TbAnalyze />
-					<p>
-						{reps} <span className="text-xs">reps</span>
-					</p>
-				</li>
-			</ul>
-
-			<ul className="flex justify-end w-1/5 gap-1 text-xl text-gray-400">
-				<li>
-					<TbPencil />
-				</li>
-				<li>
-					<button disabled={isDeleting} onClick={() => deleteWorkout(_id)}>
-						{isDeleting ? <TbLoader2 className="animate-spin" /> : <TbTrashX />}
-					</button>
-				</li>
-			</ul>
+		<li className="flex flex-col overflow-hidden border rounded-xl">
+			<div className="flex items-center justify-between p-2">
+				<h2>{title}</h2>
+				<ul className="flex gap-2 text-xl text-gray-400">
+					<li>
+						<button>
+							<TbPencil />
+						</button>
+					</li>
+					<li>
+						<button disabled={isDeleting} onClick={() => deleteWorkout(_id)}>
+							{isDeleting ? (
+								<TbLoader2 className="animate-spin" />
+							) : (
+								<TbTrashX />
+							)}
+						</button>
+					</li>
+				</ul>
+			</div>
+			<div className="py-1.5 px-2 text-sm bg-gray-100">
+				<ul className="flex gap-6">
+					<li className="flex items-center gap-1">
+						<TbCircleDashed />
+						{reps}
+						<span className="text-xs">reps</span>
+					</li>
+					<li className="flex items-center gap-1">
+						<TbCircle />
+						{sets}
+						<span className="text-xs">sets</span>
+					</li>
+					<li className="flex items-center gap-1">
+						<TbWeight />
+						{load}
+						<span className="text-xs">(Kg)</span>
+					</li>
+				</ul>
+			</div>
 		</li>
 	);
 }
