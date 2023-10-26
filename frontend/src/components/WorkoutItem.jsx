@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import {
 	TbWeight,
@@ -24,10 +24,22 @@ export default function WorkoutItem({ workout }) {
 		load: load,
 		sets: sets,
 	});
+
 	const [isDeleting, setIsDeleting] = useState(false);
 	const [isEditing, setIsEditing] = useState(false);
 	const [errorMsg, setErrorMsg] = useState("");
 	const [enableEdit, setEnableEdit] = useState(false);
+
+	useEffect(() => {
+		if (!enableEdit) {
+			setCurWorkout({
+				title: title,
+				reps: reps,
+				load: load,
+				sets: sets,
+			});
+		}
+	}, [enableEdit]);
 
 	const deleteWorkout = async (id) => {
 		setIsDeleting(true);
@@ -66,7 +78,7 @@ export default function WorkoutItem({ workout }) {
 
 			const data = await res.json();
 			setWorkouts((prev) =>
-				prev.map((workout) => (workout._id === data._id ? data : workout))
+				prev.map((workout) => (workout._id === data._id ? curWorkout : workout))
 			);
 			setEnableEdit(false);
 		} catch (error) {
@@ -83,7 +95,7 @@ export default function WorkoutItem({ workout }) {
 
 	return (
 		<li className="flex flex-col overflow-hidden border rounded-xl">
-			<div className="flex items-center justify-between p-2">
+			<div className="flex items-center justify-between p-2 pr-4">
 				<input
 					type="text"
 					name="title"
