@@ -33,6 +33,7 @@ export default function WorkoutItem({ workout }) {
 	useEffect(() => {
 		if (!enableEdit) {
 			setCurWorkout({
+				...workout,
 				title: title,
 				reps: reps,
 				load: load,
