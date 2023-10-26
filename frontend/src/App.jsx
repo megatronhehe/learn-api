@@ -13,10 +13,12 @@ function App() {
 				<div className="w-full max-w-2xl">
 					<section className="flex items-center justify-between pb-4 pr-2 mb-4 text-xl border-b">
 						<h1 className="tracking-wide">My Workout</h1>
-						<HiPlusSmall
+						<button
 							onClick={() => setToggleModal(true)}
-							className="text-gray-500"
-						/>
+							className="duration-200 hover:scale-125"
+						>
+							<HiPlusSmall className="text-gray-500" />
+						</button>
 					</section>
 
 					<section>

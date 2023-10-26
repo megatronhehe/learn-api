@@ -19,8 +19,6 @@ export default function WorkoutItem({ workout }) {
 	const [isDeleting, setIsDeleting] = useState(false);
 	const [errorMsg, setErrorMsg] = useState("");
 
-	console.log(workout);
-
 	const deleteWorkout = async (id) => {
 		setIsDeleting(true);
 		setErrorMsg("");
@@ -48,12 +46,16 @@ export default function WorkoutItem({ workout }) {
 				<h2>{title}</h2>
 				<ul className="flex gap-2 text-xl text-gray-400">
 					<li>
-						<button>
+						<button className="duration-200 hover:scale-125">
 							<TbPencil />
 						</button>
 					</li>
 					<li>
-						<button disabled={isDeleting} onClick={() => deleteWorkout(_id)}>
+						<button
+							className="duration-200 hover:scale-125"
+							disabled={isDeleting}
+							onClick={() => deleteWorkout(_id)}
+						>
 							{isDeleting ? (
 								<TbLoader2 className="animate-spin" />
 							) : (
