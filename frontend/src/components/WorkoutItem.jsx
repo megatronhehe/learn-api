@@ -110,8 +110,8 @@ export default function WorkoutItem({ workout }) {
 						<button
 							disabled={!enableEdit}
 							onClick={() => editWorkout(_id)}
-							className={`duration-200 hover:scale-125 hover:text-green-400
-								${enableEdit ? "scale-100" : "scale-0"}
+							className={`duration-200 hover:text-green-400
+								${enableEdit ? "scale-100 hover:scale-125 " : "scale-0"}
 								`}
 						>
 							<TbCheck />
