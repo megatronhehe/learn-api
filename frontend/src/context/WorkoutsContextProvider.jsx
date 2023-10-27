@@ -7,6 +7,7 @@ export default function WorkoutsContextProvider({ children }) {
 		fetching: false,
 		creating: false,
 		deleting: false,
+		editing: false,
 	});
 	const [errorMsg, setErrorMsg] = useState("");
 	const [workouts, setWorkouts] = useState([]);
@@ -59,7 +60,7 @@ export default function WorkoutsContextProvider({ children }) {
 	};
 
 	const deleteWorkout = async (id) => {
-		setIsLoading((prev) => ({ ...prev, deleting: false }));
+		setIsLoading((prev) => ({ ...prev, deleting: true }));
 		setErrorMsg("");
 		try {
 			const res = await fetch(`http://localhost:4000/api/workouts/${id}`, {
@@ -79,6 +80,34 @@ export default function WorkoutsContextProvider({ children }) {
 		}
 	};
 
+	const editWorkout = async (id, editedWorkout, setEnableEdit) => {
+		setIsLoading((prev) => ({ ...prev, editing: true }));
+		setErrorMsg("");
+		try {
+			const res = await fetch(`http://localhost:4000/api/workouts/${id}`, {
+				method: "PATCH",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(editedWorkout),
+			});
+
+			if (!res.ok) {
+				return setErrorMsg(`${res.status} | ${res.statusText}`);
+			}
+
+			const data = await res.json();
+			setWorkouts((prev) =>
+				prev.map((workout) =>
+					workout._id === data._id ? editedWorkout : workout
+				)
+			);
+			setEnableEdit(false);
+		} catch (error) {
+			setErrorMsg(error.message);
+		} finally {
+			setIsLoading((prev) => ({ ...prev, editing: false }));
+		}
+	};
+
 	const isErrorExist = errorMsg.length > 0;
 
 	return (
@@ -92,6 +121,7 @@ export default function WorkoutsContextProvider({ children }) {
 				setRetrig,
 				createWorkout,
 				deleteWorkout,
+				editWorkout,
 			}}
 		>
 			{children}

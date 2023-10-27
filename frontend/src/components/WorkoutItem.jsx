@@ -16,7 +16,7 @@ import WorkoutsContext from "../context/WorkoutsContext";
 export default function WorkoutItem({ workout }) {
 	const { _id, load, reps, sets, title } = workout;
 
-	const { deleteWorkout, isLoading } = useContext(WorkoutsContext);
+	const { deleteWorkout, editWorkout, isLoading } = useContext(WorkoutsContext);
 
 	const [curWorkout, setCurWorkout] = useState({
 		title: title,
@@ -25,8 +25,6 @@ export default function WorkoutItem({ workout }) {
 		sets: sets,
 	});
 
-	const [isEditing, setIsEditing] = useState(false);
-	const [errorMsg, setErrorMsg] = useState("");
 	const [enableEdit, setEnableEdit] = useState(false);
 
 	useEffect(() => {
@@ -40,32 +38,6 @@ export default function WorkoutItem({ workout }) {
 			});
 		}
 	}, [enableEdit]);
-
-	const editWorkout = async (id) => {
-		setIsEditing(true);
-		setErrorMsg("");
-		try {
-			const res = await fetch(`http://localhost:4000/api/workouts/${id}`, {
-				method: "PATCH",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(curWorkout),
-			});
-
-			if (!res.ok) {
-				return setErrorMsg(`${res.status} | ${res.statusText}`);
-			}
-
-			const data = await res.json();
-			setWorkouts((prev) =>
-				prev.map((workout) => (workout._id === data._id ? curWorkout : workout))
-			);
-			setEnableEdit(false);
-		} catch (error) {
-			setErrorMsg(error.message);
-		} finally {
-			setIsEditing(false);
-		}
-	};
 
 	const handleEditWorkout = (e) => {
 		const { name, value } = e.target;
@@ -87,7 +59,7 @@ export default function WorkoutItem({ workout }) {
 					<li>
 						<button
 							disabled={!enableEdit}
-							onClick={() => editWorkout(_id)}
+							onClick={() => editWorkout(_id, curWorkout, setEnableEdit)}
 							className={`duration-200 hover:text-green-400
 								${enableEdit ? "scale-100 hover:scale-125 " : "scale-0"}
 								`}
