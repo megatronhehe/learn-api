@@ -16,7 +16,7 @@ import WorkoutsContext from "../context/WorkoutsContext";
 export default function WorkoutItem({ workout }) {
 	const { _id, load, reps, sets, title } = workout;
 
-	const { setWorkouts } = useContext(WorkoutsContext);
+	const { deleteWorkout, isLoading } = useContext(WorkoutsContext);
 
 	const [curWorkout, setCurWorkout] = useState({
 		title: title,
@@ -25,7 +25,6 @@ export default function WorkoutItem({ workout }) {
 		sets: sets,
 	});
 
-	const [isDeleting, setIsDeleting] = useState(false);
 	const [isEditing, setIsEditing] = useState(false);
 	const [errorMsg, setErrorMsg] = useState("");
 	const [enableEdit, setEnableEdit] = useState(false);
@@ -41,27 +40,6 @@ export default function WorkoutItem({ workout }) {
 			});
 		}
 	}, [enableEdit]);
-
-	const deleteWorkout = async (id) => {
-		setIsDeleting(true);
-		setErrorMsg("");
-		try {
-			const res = await fetch(`http://localhost:4000/api/workouts/${id}`, {
-				method: "DELETE",
-			});
-
-			if (!res.ok) {
-				return setErrorMsg(`${res.status} | ${res.statusText}`);
-			}
-
-			const data = await res.json();
-			setWorkouts((prev) => prev.filter((workout) => workout._id !== data._id));
-		} catch (error) {
-			setErrorMsg(error.message);
-		} finally {
-			setIsDeleting(false);
-		}
-	};
 
 	const editWorkout = async (id) => {
 		setIsEditing(true);
@@ -130,10 +108,10 @@ export default function WorkoutItem({ workout }) {
 					<li>
 						<button
 							className="duration-200 hover:scale-125 hover:text-red-400"
-							disabled={isDeleting}
+							disabled={isLoading.deleting}
 							onClick={() => deleteWorkout(_id)}
 						>
-							{isDeleting ? (
+							{isLoading.deleting ? (
 								<TbLoader2 className="animate-spin" />
 							) : (
 								<TbTrashX />

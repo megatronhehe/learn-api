@@ -6,6 +6,7 @@ export default function WorkoutsContextProvider({ children }) {
 	const [isLoading, setIsLoading] = useState({
 		fetching: false,
 		creating: false,
+		deleting: false,
 	});
 	const [errorMsg, setErrorMsg] = useState("");
 	const [workouts, setWorkouts] = useState([]);
@@ -57,6 +58,27 @@ export default function WorkoutsContextProvider({ children }) {
 		}
 	};
 
+	const deleteWorkout = async (id) => {
+		setIsLoading((prev) => ({ ...prev, deleting: false }));
+		setErrorMsg("");
+		try {
+			const res = await fetch(`http://localhost:4000/api/workouts/${id}`, {
+				method: "DELETE",
+			});
+
+			if (!res.ok) {
+				return setErrorMsg(`${res.status} | ${res.statusText}`);
+			}
+
+			const data = await res.json();
+			setWorkouts((prev) => prev.filter((workout) => workout._id !== data._id));
+		} catch (error) {
+			setErrorMsg(error.message);
+		} finally {
+			setIsLoading((prev) => ({ ...prev, deleting: false }));
+		}
+	};
+
 	const isErrorExist = errorMsg.length > 0;
 
 	return (
@@ -69,6 +91,7 @@ export default function WorkoutsContextProvider({ children }) {
 				errorMsg,
 				setRetrig,
 				createWorkout,
+				deleteWorkout,
 			}}
 		>
 			{children}
