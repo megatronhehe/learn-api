@@ -17,38 +17,12 @@ export default function CreateWorkoutModal({ setToggleModal }) {
 		reps: 0,
 		sets: 0,
 	});
-	const [isAdding, setIsAdding] = useState(false);
-	const [errorMsg, setErrorMsg] = useState("");
 
-	const { setWorkouts } = useContext(WorkoutsContext);
+	const { createWorkout, isLoading } = useContext(WorkoutsContext);
 
 	const handleWorkoutForm = (e) => {
 		const { name, value } = e.target;
 		setWorkoutForm((prev) => ({ ...prev, [name]: value }));
-	};
-
-	const createWorkout = async (e) => {
-		e.preventDefault();
-		setIsAdding(true);
-		setErrorMsg("");
-		try {
-			const res = await fetch("http://localhost:4000/api/workouts/", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(workoutForm),
-			});
-
-			if (!res.ok) {
-				return setErrorMsg(`${res.status} | ${res.statusText}`);
-			}
-			const data = await res.json();
-			setWorkouts((prev) => [data, ...prev]);
-			setToggleModal(false);
-		} catch (error) {
-			setErrorMsg(error.message);
-		} finally {
-			setIsAdding(false);
-		}
 	};
 
 	const isValid = workoutForm.title.length > 0 && workoutForm.reps > 0;
@@ -125,8 +99,11 @@ export default function CreateWorkoutModal({ setToggleModal }) {
 					</div>
 
 					<button
-						disabled={isAdding || !isValid}
-						onClick={createWorkout}
+						disabled={isLoading.creating || !isValid}
+						onClick={(e) => {
+							e.preventDefault();
+							createWorkout(workoutForm, setToggleModal);
+						}}
 						className={`px-4 py-2 text-white  rounded-xl duration-200  flex justify-center
 							${
 								!isValid
@@ -135,7 +112,7 @@ export default function CreateWorkoutModal({ setToggleModal }) {
 							}
 						`}
 					>
-						{isAdding ? (
+						{isLoading.creating ? (
 							<TbLoader2 className="animate-spin" />
 						) : (
 							"create new workout +"

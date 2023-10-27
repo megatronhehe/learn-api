@@ -12,7 +12,7 @@ export default function WorkoutList({ setToggleModal }) {
 
 	const isListEmpty = workouts.length === 0;
 
-	if (isLoading) {
+	if (isLoading.fetching) {
 		return (
 			<div className="flex flex-col items-center gap-6 pt-12">
 				<h1 className="flex items-center gap-2">
