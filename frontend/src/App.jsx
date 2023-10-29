@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 import { HiPlusSmall } from "react-icons/hi2";
-import { TbBarbell } from "react-icons/tb";
+import { TbBarbell, TbRefresh } from "react-icons/tb";
 
 import WorkoutList from "./components/WorkoutList";
 import CreateWorkoutModal from "./components/CreateWorkoutModal";
 
+import WorkoutsContext from "./context/WorkoutsContext";
+
 function App() {
 	const [toggleModal, setToggleModal] = useState(false);
+
+	const { setRefetch } = useContext(WorkoutsContext);
 
 	return (
 		<>
@@ -18,12 +22,20 @@ function App() {
 							<TbBarbell className="text-3xl" />
 							My Workout
 						</h1>
-						<button
-							onClick={() => setToggleModal(true)}
-							className="duration-200 hover:scale-125"
-						>
-							<HiPlusSmall className="text-gray-500" />
-						</button>
+						<div className="flex gap-2">
+							<button
+								onClick={() => setRefetch((prev) => !prev)}
+								className="duration-200 hover:scale-125"
+							>
+								<TbRefresh className="text-gray-500 hover:text-blue-400" />
+							</button>
+							<button
+								onClick={() => setToggleModal(true)}
+								className="duration-200 hover:scale-125"
+							>
+								<HiPlusSmall className="text-gray-500 hover:text-blue-400" />
+							</button>
+						</div>
 					</section>
 
 					<section>
