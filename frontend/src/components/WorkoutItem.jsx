@@ -45,7 +45,7 @@ export default function WorkoutItem({ workout }) {
 	};
 
 	return (
-		<li className="flex flex-col overflow-hidden duration-200 border border-gray-100 rounded-xl hover:scale-105 ">
+		<li className="flex flex-col overflow-hidden duration-200 border border-gray-100 rounded-xl ">
 			<div className="flex items-center justify-between p-2 pr-4">
 				<input
 					type="text"

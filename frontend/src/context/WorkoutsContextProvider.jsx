@@ -11,7 +11,7 @@ export default function WorkoutsContextProvider({ children }) {
 	});
 	const [errorMsg, setErrorMsg] = useState("");
 	const [workouts, setWorkouts] = useState([]);
-	const [retrig, setRetrig] = useState(false);
+	const [refetch, setRefetch] = useState(false);
 
 	const fetchWorkout = async () => {
 		setIsLoading((prev) => ({ ...prev, fetching: true }));
@@ -34,7 +34,7 @@ export default function WorkoutsContextProvider({ children }) {
 
 	useEffect(() => {
 		fetchWorkout();
-	}, [retrig]);
+	}, [refetch]);
 
 	const createWorkout = async (workoutForm, setToggleModal) => {
 		setIsLoading((prev) => ({ ...prev, creating: true }));
@@ -118,7 +118,7 @@ export default function WorkoutsContextProvider({ children }) {
 				isLoading,
 				isErrorExist,
 				errorMsg,
-				setRetrig,
+				setRefetch,
 				createWorkout,
 				deleteWorkout,
 				editWorkout,

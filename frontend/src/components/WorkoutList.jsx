@@ -7,7 +7,7 @@ import { TbRefresh, TbPlus, TbLoader2 } from "react-icons/tb";
 import WorkoutsContext from "../context/WorkoutsContext";
 
 export default function WorkoutList({ setToggleModal }) {
-	const { workouts, isLoading, isErrorExist, errorMsg, setRetrig } =
+	const { workouts, isLoading, isErrorExist, errorMsg, setRefetch } =
 		useContext(WorkoutsContext);
 
 	const isListEmpty = workouts.length === 0;
@@ -27,7 +27,7 @@ export default function WorkoutList({ setToggleModal }) {
 			<div className="flex flex-col items-center gap-6 pt-12">
 				<h1>{errorMsg}</h1>
 				<button
-					onClick={() => setRetrig((prev) => !prev)}
+					onClick={() => setRefetch((prev) => !prev)}
 					className="flex items-center gap-2 px-4 py-2 text-sm text-white bg-blue-400 rounded-xl w-22"
 				>
 					Try again <TbRefresh />
