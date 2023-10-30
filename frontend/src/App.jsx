@@ -8,6 +8,8 @@ import CreateWorkoutModal from "./components/CreateWorkoutModal";
 
 import WorkoutsContext from "./context/WorkoutsContext";
 
+import { AnimatePresence } from "framer-motion";
+
 function App() {
 	const [toggleModal, setToggleModal] = useState(false);
 
@@ -44,7 +46,9 @@ function App() {
 				</div>
 			</main>
 
-			{toggleModal && <CreateWorkoutModal setToggleModal={setToggleModal} />}
+			<AnimatePresence>
+				{toggleModal && <CreateWorkoutModal setToggleModal={setToggleModal} />}
+			</AnimatePresence>
 		</>
 	);
 }

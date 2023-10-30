@@ -8,6 +8,8 @@ import {
 	TbCircleDashed,
 } from "react-icons/tb";
 
+import { motion } from "framer-motion";
+
 import WorkoutsContext from "../context/WorkoutsContext";
 
 export default function CreateWorkoutModal({ setToggleModal }) {
@@ -28,14 +30,20 @@ export default function CreateWorkoutModal({ setToggleModal }) {
 	const isValid = workoutForm.title.length > 0 && workoutForm.reps > 0;
 
 	return (
-		<div
+		<motion.div
+			initial={{ opacity: 0 }}
+			animate={{ opacity: 1 }}
+			exit={{ opacity: 0 }}
 			onClick={() => setToggleModal(false)}
 			className="fixed top-0 left-0 flex flex-col items-center justify-center w-full h-full backdrop-filter backdrop-blur-sm "
 		>
 			<button className="flex items-center justify-center w-8 h-8 mb-4 text-white duration-200 bg-red-300 rounded-full hover:bg-red-400 hover:scale-110">
 				<TbX />
 			</button>
-			<div
+			<motion.div
+				initial={{ y: -20 }}
+				animate={{ y: 0 }}
+				exit={{ y: -20 }}
 				onClick={(e) => e.stopPropagation()}
 				className="w-full max-w-xs p-4 bg-white border rounded-xl"
 			>
@@ -119,7 +127,7 @@ export default function CreateWorkoutModal({ setToggleModal }) {
 						)}
 					</button>
 				</form>
-			</div>
-		</div>
+			</motion.div>
+		</motion.div>
 	);
 }
